@@ -53,7 +53,7 @@
 
 点击`Start attack`开始爆破.
 
-![](https://github.com/TheKingOfDuck/BurpFakeIP/blob/master/images/15597193222286.png)
+![](https://github.com/TheKingOfDuck/BurpFakeIP/blob/master/images/15597193222287.png)
 
 如上图,实现每次爆破都使用不同的伪ip进行,避免被ban。
 
