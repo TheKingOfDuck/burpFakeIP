@@ -103,7 +103,6 @@ class BurpExtender(IBurpExtender, IHttpListener, IContextMenuFactory, IIntruderP
             self.headers.append(u'X-remote-IP:' + ip)
             self.headers.append(u'X-remote-addr:' + ip)
             self.headers.append(u'True-Client-IP:' + ip)
-            self.headers.append(u'X-Client-IP:' + ip)
             self.headers.append(u'Client-IP:' + ip)
             self.headers.append(u'X-Real-IP:' + ip)
             # print 'self.headers',self.headers
@@ -128,7 +127,6 @@ class BurpExtender(IBurpExtender, IHttpListener, IContextMenuFactory, IIntruderP
             self.headers.append(u'X-remote-IP:' + ip)
             self.headers.append(u'X-remote-addr:' + ip)
             self.headers.append(u'True-Client-IP:' + ip)
-            self.headers.append(u'X-Client-IP:' + ip)
             self.headers.append(u'Client-IP:' + ip)
             self.headers.append(u'X-Real-IP:' + ip)
             # print 'self.headers',self.headers
@@ -156,7 +154,6 @@ class BurpExtender(IBurpExtender, IHttpListener, IContextMenuFactory, IIntruderP
             self.headers.append(u'X-remote-IP:' + ip)
             self.headers.append(u'X-remote-addr:' + ip)
             self.headers.append(u'True-Client-IP:' + ip)
-            self.headers.append(u'X-Client-IP:' + ip)
             self.headers.append(u'Client-IP:' + ip)
             self.headers.append(u'X-Real-IP:' + ip)
 
