@@ -11,9 +11,6 @@
 -------------------------------------------------
 """
 __author__ = 'CoolCat'
-
-# !/usr/bin/env python
-# coding:utf-8
 import sys
 
 reload(sys)
@@ -56,9 +53,6 @@ class BurpExtender(IBurpExtender, IHttpListener, IContextMenuFactory, IIntruderP
         # obtain an extension helpers object
         self._helpers = callbacks.getHelpers()
 
-        # # set our extension name
-        # callbacks.setExtensionName("Custom intruder payloads")
-
         # register ourselves as an Intruder payload generator
         callbacks.registerIntruderPayloadGeneratorFactory(self)
 
@@ -85,87 +79,65 @@ class BurpExtender(IBurpExtender, IHttpListener, IContextMenuFactory, IIntruderP
 
         return self.menus if self.menus else None
 
+    def addIPs(self, ip):
+
+            currentRequest = self.invocation.getSelectedMessages()[0]  # getSelectedMessages()返回数组，但有时为1个，有时2个
+            requestInfo = self._helpers.analyzeRequest(currentRequest)  # 该部分实际获取到的是全部的Http请求包
+            self.headers = list(requestInfo.getHeaders())
+
+            self.headers.append(u'X-Forwarded-For:' + ip)
+            self.headers.append(u'X-Forwarded:' + ip)
+            self.headers.append(u'Forwarded-For:' + ip)
+            self.headers.append(u'Forwarded:' + ip)
+            self.headers.append(u'X-Forwarded-Host:' + ip)
+            self.headers.append(u'X-remote-IP:' + ip)
+            self.headers.append(u'X-remote-addr:' + ip)
+            self.headers.append(u'True-Client-IP:' + ip)
+            self.headers.append(u'X-Client-IP:' + ip)
+            self.headers.append(u'Client-IP:' + ip)
+            self.headers.append(u'X-Real-IP:' + ip)
+            self.headers.append(u'Ali-CDN-Real-IP:' + ip)
+            self.headers.append(u'Cdn-Src-Ip:' + ip)
+            self.headers.append(u'Cdn-Real-Ip:' + ip)
+            self.headers.append(u'CF-Connecting-IP:' + ip)
+            self.headers.append(u'X-Cluster-Client-IP:' + ip)
+            self.headers.append(u'WL-Proxy-Client-IP:' + ip)
+            self.headers.append(u'Proxy-Client-IP:' + ip)
+            self.headers.append(u'Fastly-Client-Ip:' + ip)
+            self.headers.append(u'True-Client-Ip:' + ip)
+
+
+
+        
+
+            
+
+            # print 'self.headers',self.headers
+            bodyBytes = currentRequest.getRequest()[requestInfo.getBodyOffset():]  # bytes[]类型
+            self.body = self._helpers.bytesToString(bodyBytes)  # bytes to string转换一下
+            # print 'self.body:',self.body
+            newMessage = self._helpers.buildHttpMessage(self.headers, self.body)
+            currentRequest.setRequest(newMessage)  # setRequest() 会动态更新setRequest\
+
+
+
     def modifyHeader(self, x):
         if x.getSource().text == 'inputIP':  # 通过获取当前点击的子菜单的 text 属性，确定当前需要执行的 command
-            currentRequest = self.invocation.getSelectedMessages()[0]  # getSelectedMessages()返回数组，但有时为1个，有时2个
-            requestInfo = self._helpers.analyzeRequest(currentRequest)  # 该部分实际获取到的是全部的Http请求包
-            self.headers = list(requestInfo.getHeaders())
-            # self.headers.append(u'X-Forwarded-For:127.0.0.1')
-            # self.headers.append(u'X-Client-IP:127.0.0.1')
-
-            # JOptionPane.showMessageDialog(None, "Command line configured!")
-
             ip = JOptionPane.showInputDialog("Pls input ur ip:");
 
-            self.headers.append(u'X-Forwarded-For:' + ip)
-            self.headers.append(u'X-Forwarded-Host:' + ip)
-            self.headers.append(u'X-Client-IP:' + ip)
-            self.headers.append(u'X-remote-IP:' + ip)
-            self.headers.append(u'X-remote-addr:' + ip)
-            self.headers.append(u'True-Client-IP:' + ip)
-            self.headers.append(u'X-Client-IP:' + ip)
-            self.headers.append(u'Client-IP:' + ip)
-            self.headers.append(u'X-Real-IP:' + ip)
-            # print 'self.headers',self.headers
-            bodyBytes = currentRequest.getRequest()[requestInfo.getBodyOffset():]  # bytes[]类型
-            self.body = self._helpers.bytesToString(bodyBytes)  # bytes to string转换一下
-            # print 'self.body:',self.body
-            newMessage = self._helpers.buildHttpMessage(self.headers, self.body)
-            currentRequest.setRequest(newMessage)  # setRequest() 会动态更新setRequest\
-
-
+            self.addIPs(ip)
         elif x.getSource().text == '127.0.0.1':
-            currentRequest = self.invocation.getSelectedMessages()[0]  # getSelectedMessages()返回数组，但有时为1个，有时2个
-            requestInfo = self._helpers.analyzeRequest(currentRequest)  # 该部分实际获取到的是全部的Http请求包
-            self.headers = list(requestInfo.getHeaders())
-            # self.headers.append(u'X-Forwarded-For:127.0.0.1')
-            # self.headers.append(u'X-Client-IP:127.0.0.1')
-
-            ip = '127.0.0.1'
-            self.headers.append(u'X-Forwarded-For:' + ip)
-            self.headers.append(u'X-Forwarded-Host:' + ip)
-            self.headers.append(u'X-Client-IP:' + ip)
-            self.headers.append(u'X-remote-IP:' + ip)
-            self.headers.append(u'X-remote-addr:' + ip)
-            self.headers.append(u'True-Client-IP:' + ip)
-            self.headers.append(u'X-Client-IP:' + ip)
-            self.headers.append(u'Client-IP:' + ip)
-            self.headers.append(u'X-Real-IP:' + ip)
-            # print 'self.headers',self.headers
-            bodyBytes = currentRequest.getRequest()[requestInfo.getBodyOffset():]  # bytes[]类型
-            self.body = self._helpers.bytesToString(bodyBytes)  # bytes to string转换一下
-            # print 'self.body:',self.body
-            newMessage = self._helpers.buildHttpMessage(self.headers, self.body)
-            currentRequest.setRequest(newMessage)  # setRequest() 会动态更新setRequest\
+            self.addIPs("127.0.0.1")
 
         elif x.getSource().text == 'randomIP':
-            currentRequest = self.invocation.getSelectedMessages()[0]  # getSelectedMessages()返回数组，但有时为1个，有时2个
-            requestInfo = self._helpers.analyzeRequest(currentRequest)  # 该部分实际获取到的是全部的Http请求包
-            self.headers = list(requestInfo.getHeaders())
-            # self.headers.append(u'X-Forwarded-For:127.0.0.1')
-            # self.headers.append(u'X-Client-IP:127.0.0.1')
 
             a = str(int(random.uniform(1, 255)))
             b = str(int(random.uniform(1, 255)))
             c = str(int(random.uniform(1, 255)))
             d = str(int(random.uniform(1, 255)))
             ip = a + "." + b + "." + c + "." + d
-            self.headers.append(u'X-Forwarded-For:' + ip)
-            self.headers.append(u'X-Forwarded-Host:' + ip)
-            self.headers.append(u'X-Client-IP:' + ip)
-            self.headers.append(u'X-remote-IP:' + ip)
-            self.headers.append(u'X-remote-addr:' + ip)
-            self.headers.append(u'True-Client-IP:' + ip)
-            self.headers.append(u'X-Client-IP:' + ip)
-            self.headers.append(u'Client-IP:' + ip)
-            self.headers.append(u'X-Real-IP:' + ip)
 
-            # print 'self.headers',self.headers
-            bodyBytes = currentRequest.getRequest()[requestInfo.getBodyOffset():]  # bytes[]类型
-            self.body = self._helpers.bytesToString(bodyBytes)  # bytes to string转换一下
-            # print 'self.body:',self.body
-            newMessage = self._helpers.buildHttpMessage(self.headers, self.body)
-            currentRequest.setRequest(newMessage)  # setRequest() 会动态更新setRequest\
+            self.addIPs(ip)
 
     def getGeneratorName(self):
         return "fakeIpPayloads"
@@ -192,7 +164,7 @@ class fakeIpGenerator(IIntruderPayloadGenerator):
         else:
             return True
 
-    # 接受原始的HTTP负载，current_payload是数组，转化成字符串，传递给模糊测试函数mutate_payload
+    # 接受原始的HTTP负载，current_payload是数组，
     def getNextPayload(self, current_payload):
         a = str(int(random.uniform(1, 255)))
         b = str(int(random.uniform(1, 255)))
@@ -202,9 +174,3 @@ class fakeIpGenerator(IIntruderPayloadGenerator):
         payload = a + "." + b + "." + c + "." + d
 
         return payload
-
-
-
-
-
-
