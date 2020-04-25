@@ -1,8 +1,8 @@
 ## burpFakeIP
 
-**2020/03/22 回头看了下代码,写得贼垃圾,不过也不打算更新了,关注别的吧。**
+**2020/04/25 **
 
-[https://github.com/TheKingOfDuck/burpJsEncrypter](https://github.com/TheKingOfDuck/burpJsEncrypter)
+优化代码，新增9种请求头
 
 Java它不香么，要用啥Python。
 
