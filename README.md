@@ -1,10 +1,9 @@
 ## burpFakeIP
 
-**2020/04/25 **
+** 2020/04/25 **
 
 优化代码，新增9种请求头。
 
-> burpsuite伪造ip,我是认真的。
 
 ![](https://github.com/TheKingOfDuck/BurpFakeIP/blob/master/images/15597179485863.png)
 
