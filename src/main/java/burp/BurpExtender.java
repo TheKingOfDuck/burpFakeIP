@@ -86,8 +86,8 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory,IIntrude
         autoXFF.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                String xff = JOptionPane.showInputDialog("Pls input ur XFF header name:","X-Forwarded-For");
-                String xffvalue = JOptionPane.showInputDialog("Pls input ur XFF header value:","$RandomIp$");
+                String xff = JOptionPane.showInputDialog("Pls input ur XFF header name:",Config.AUTOXFF);
+                String xffvalue = JOptionPane.showInputDialog("Pls input ur XFF header value:",Config.AUTOXFFVALUE);
                 Config.AUTOXFF = xff;
                 Config.AUTOXFFVALUE = xffvalue;
             }
