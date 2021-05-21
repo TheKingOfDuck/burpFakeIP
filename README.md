@@ -1,5 +1,8 @@
 ## burpFakeIP
 
+下载使用：[Releases](https://github.com/TheKingOfDuck/burpFakeIP/releases/tag/1.0)
+
+
 **2021/05/21**
 
 使用Java重构，增加了[issue](https://github.com/TheKingOfDuck/burpFakeIP/issues/8)中提到的功能特性，新增给每个请求自动添加XFF头以及随机IP的功能，具体可见右键菜单AutoXFF,默认情况下自动添加的xff头为X-Forwarded-For,值为生成的随机IP,均可自定义。
