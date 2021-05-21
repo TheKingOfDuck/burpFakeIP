@@ -129,9 +129,9 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory,IIntrude
         if (b){
             if (Config.AUTOXFFVALUE.equals("$RandomIp$")){
                 Utils.addfakeip(iHttpRequestResponse,Utils.getRandomIp());
+            }else {
+                Utils.addfakeip(iHttpRequestResponse,Config.AUTOXFFVALUE);
             }
-            Utils.addfakeip(iHttpRequestResponse,Config.AUTOXFFVALUE);
-
         }
     }
 }
