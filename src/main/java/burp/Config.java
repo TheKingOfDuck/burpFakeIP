@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class Config {
     public static List<String> HEADER_LIST = Arrays.asList(
-            "X-Forwarded-For","X-Forwarded","Forwarded-For","Forwarded", "X-Forwarded-Host",
+            "X-Forwarded-For","X-Forwarded","Forwarded-For","Forwarded","X-Requested-With","X-Requested-With", "X-Forwarded-Host",
             "X-remote-IP","X-remote-addr","True-Client-IP","X-Client-IP","Client-IP","X-Real-IP",
             "Ali-CDN-Real-IP","Cdn-Src-Ip","Cdn-Real-Ip","CF-Connecting-IP","X-Cluster-Client-IP",
             "WL-Proxy-Client-IP", "Proxy-Client-IP","Fastly-Client-Ip","True-Client-Ip","X-Originating-IP",
