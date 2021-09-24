@@ -37,7 +37,7 @@ public class Utils {
         }
 
         //更新header
-        byte[] newMessage = BurpExtender.helpers.buildHttpMessage(headers, getHttpRequestBody(currentRequest).getBytes());
+        byte[] newMessage = BurpExtender.helpers.buildHttpMessage(headers, getHttpRequestBody(currentRequest));
         currentRequest.setRequest(newMessage);
 
     }
@@ -45,38 +45,29 @@ public class Utils {
 
     public static void addfakeip(IHttpRequestResponse iHttpRequestResponse, String ip) {
 
+        //获取原请求信息
+        IRequestInfo requestInfo = BurpExtender.helpers.analyzeRequest(iHttpRequestResponse);
+        List<String> headers = requestInfo.getHeaders();
 
-        byte contentType = BurpExtender.helpers.analyzeRequest(iHttpRequestResponse).getContentType();
+        //为每个请求添加一个Header
+        headers = headers.stream().filter(key -> !key.equals(Config.AUTOXFF_KEY)).collect(Collectors.toList());
+        headers.add(String.format("%s: %s", Config.AUTOXFF_KEY, ip));
 
-        if (contentType != CONTENT_TYPE_MULTIPART) {
-            //获取原请求信息
-            IRequestInfo requestInfo = BurpExtender.helpers.analyzeRequest(iHttpRequestResponse);
-            List<String> headers = requestInfo.getHeaders();
-
-            //为每个请求添加一个Header
-            headers = headers.stream().filter(key -> !key.equals(Config.AUTOXFF_KEY)).collect(Collectors.toList());
-            headers.add(String.format("%s: %s", Config.AUTOXFF_KEY, ip));
-
-            //更新header
-            byte[] newMessage = BurpExtender.helpers.buildHttpMessage(headers, getHttpRequestBody(iHttpRequestResponse).getBytes());
-            iHttpRequestResponse.setRequest(newMessage);
-        }
+        //更新header
+        byte[] newMessage = BurpExtender.helpers.buildHttpMessage(headers, getHttpRequestBody(iHttpRequestResponse));
+        iHttpRequestResponse.setRequest(newMessage);
 
 
     }
 
-    private static String getHttpRequestBody(IHttpRequestResponse httpRequestResponse) {
+    private static byte[] getHttpRequestBody(IHttpRequestResponse httpRequestResponse) {
         byte[] request = httpRequestResponse.getRequest();
         IRequestInfo requestInfo = BurpExtender.helpers.analyzeRequest(request);
 
         int httpBodyOffset = requestInfo.getBodyOffset();
         int httpBodyLength = request.length - httpBodyOffset;
-        String httpBody = null;
-        try {
-            httpBody = new String(request, httpBodyOffset, httpBodyLength, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+        byte[] httpBody = new byte[httpBodyLength];
+        System.arraycopy(request,httpBodyOffset,httpBody,0,httpBodyLength);
         return httpBody;
     }
 
