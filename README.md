@@ -2,6 +2,10 @@
 
 下载使用：[Releases](https://github.com/TheKingOfDuck/burpFakeIP/releases/tag/1.0)
 
+**2021/09/24**
+
+修复[M00nBack](https://github.com/M00nBack)反馈的一个bug。
+
 
 **2021/05/21**
 
