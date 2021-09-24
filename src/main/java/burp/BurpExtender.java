@@ -18,7 +18,7 @@ import java.util.List;
 public class BurpExtender implements IBurpExtender, IContextMenuFactory,IIntruderPayloadGeneratorFactory, IIntruderPayloadGenerator, IHttpListener{
     public static IExtensionHelpers helpers;
     private String PLUGIN_NAME = "burpFakeIP";
-    private String VERSION = "1.0";
+    private String VERSION = "1.1";
     public static PrintWriter stdout;
 
     @Override

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import static burp.IRequestInfo.CONTENT_TYPE_MULTIPART;
+
 /**
  * Project: fakeIP
  * Date:2021/5/21 上午11:30
@@ -16,7 +18,7 @@ import java.util.stream.Collectors;
  */
 public class Utils {
 
-    public static void addfakeip(IContextMenuInvocation iContextMenuInvocation,String ip) {
+    public static void addfakeip(IContextMenuInvocation iContextMenuInvocation, String ip) {
 
         //获取原请求信息
         IHttpRequestResponse currentRequest = iContextMenuInvocation.getSelectedMessages()[0];
@@ -25,12 +27,12 @@ public class Utils {
 
         //去除header中本身已经有的字段
         List<String> templist = Config.HEADER_LIST;
-        for (String header:headers) {
+        for (String header : headers) {
             String hkey = header.split(":")[0];
-            templist = templist.stream().filter( key -> !key.equals(hkey)).collect(Collectors.toList());
+            templist = templist.stream().filter(key -> !key.equals(hkey)).collect(Collectors.toList());
         }
-        for (String headerkey:templist) {
-            headers.add(String.format("%s: %s",headerkey,ip));
+        for (String headerkey : templist) {
+            headers.add(String.format("%s: %s", headerkey, ip));
         }
 
         //更新header
@@ -40,19 +42,25 @@ public class Utils {
     }
 
 
-    public static void addfakeip(IHttpRequestResponse iHttpRequestResponse,String ip) {
+    public static void addfakeip(IHttpRequestResponse iHttpRequestResponse, String ip) {
 
-        //获取原请求信息
-        IRequestInfo requestInfo = BurpExtender.helpers.analyzeRequest(iHttpRequestResponse);
-        List<String> headers = requestInfo.getHeaders();
 
-        //为每个请求添加一个Header
-        headers = headers.stream().filter( key -> !key.equals(Config.AUTOXFF)).collect(Collectors.toList());
-        headers.add(String.format("%s: %s",Config.AUTOXFF,ip));
+        byte contentType = BurpExtender.helpers.analyzeRequest(iHttpRequestResponse).getContentType();
 
-        //更新header
-        byte[] newMessage = BurpExtender.helpers.buildHttpMessage(headers, getHttpRequestBody(iHttpRequestResponse).getBytes());
-        iHttpRequestResponse.setRequest(newMessage);
+        if (contentType != CONTENT_TYPE_MULTIPART) {
+            //获取原请求信息
+            IRequestInfo requestInfo = BurpExtender.helpers.analyzeRequest(iHttpRequestResponse);
+            List<String> headers = requestInfo.getHeaders();
+
+            //为每个请求添加一个Header
+            headers = headers.stream().filter(key -> !key.equals(Config.AUTOXFF)).collect(Collectors.toList());
+            headers.add(String.format("%s: %s", Config.AUTOXFF, ip));
+
+            //更新header
+            byte[] newMessage = BurpExtender.helpers.buildHttpMessage(headers, getHttpRequestBody(iHttpRequestResponse).getBytes());
+            iHttpRequestResponse.setRequest(newMessage);
+        }
+
 
     }
 
