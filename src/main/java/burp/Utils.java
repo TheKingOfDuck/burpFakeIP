@@ -1,6 +1,7 @@
 package burp;
 
 import java.io.UnsupportedEncodingException;
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -53,8 +54,8 @@ public class Utils {
             List<String> headers = requestInfo.getHeaders();
 
             //为每个请求添加一个Header
-            headers = headers.stream().filter(key -> !key.equals(Config.AUTOXFF)).collect(Collectors.toList());
-            headers.add(String.format("%s: %s", Config.AUTOXFF, ip));
+            headers = headers.stream().filter(key -> !key.equals(Config.AUTOXFF_KEY)).collect(Collectors.toList());
+            headers.add(String.format("%s: %s", Config.AUTOXFF_KEY, ip));
 
             //更新header
             byte[] newMessage = BurpExtender.helpers.buildHttpMessage(headers, getHttpRequestBody(iHttpRequestResponse).getBytes());
@@ -95,9 +96,9 @@ public class Utils {
                 {-569376768, -564133889},
         };
 
-        Random random = new Random();
+        SecureRandom random = new SecureRandom();
         int index = random.nextInt(10);
-        String ip = num2ip(range[index][0] + new Random().nextInt(range[index][1] - range[index][0]));
+        String ip = num2ip(range[index][0] + new SecureRandom().nextInt(range[index][1] - range[index][0]));
         return ip;
     }
 

@@ -21,6 +21,7 @@ public class Config {
             "X-Host","X-Custom-IP-Authorization"
     );
 
-    public static String AUTOXFF = "X-Forwarded-For";
-    public static String AUTOXFFVALUE = "$RandomIp$";
+    public static boolean AUTOXFF_STAT = false;
+    public static String AUTOXFF_KEY = "X-Forwarded-For";
+    public static String AUTOXFF_VALUE = "$RandomIp$";
 }
